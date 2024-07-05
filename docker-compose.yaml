@@ -1,0 +1,30 @@
+version: '3.11'
+
+services:
+  money_tokenize:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./:/app/
+
+    env_file:
+      - .env
+    ports:
+      - ${EXTERNAL_APP_PORT}:${APP_PORT}
+      - ${EXTERNAL_DEBUG_PORT}:${DEBUG_PORT}
+
+    networks:
+      - money_tokenize
+    command:
+      [
+        "sh",
+        "-c",
+        "uvicorn app:app --host 0.0.0.0 --port ${APP_PORT} --reload"
+      ]
+
+ 
+networks:
+  money_tokenize:
+    driver: bridge
